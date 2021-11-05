@@ -1,6 +1,9 @@
-说明：本教程针对熟悉Linux服务器操作的技术人员，将官方发布的xxnetwrok节点的安装说明做了精简，去掉了大量的常识性操作说明。
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gw4radawnyj319g0kun0g.jpg)
+**说明：本教程针对熟悉Linux服务器操作的技术人员，将官方发布的xxnetwrok节点的安装说明做了精简，去掉了大量的常识性操作说明。**
 
 非专业人员，或者对Linux服务器不熟悉的技术人员，请查看英文版的详细操作手册：https://xxnetwork.wiki/index.php/Operating_System_Installation_and_Configuration
+
+---
 
 # 第一部分：环境配置
 ## 1. 硬件要求
@@ -8,12 +11,20 @@
 
 硬件要求详见：https://xxnetwork.wiki/index.php/Hardware_Requirements
 
+### 1.1 cMix Node硬件要求
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gw4rcmxr5aj318i0s2wiz.jpg)
+
+### 1.2 Gateway硬件要求
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gw4rdp2g7wj30vu0jyq5k.jpg)
+
 ## 2. 软件环境
 ### 2.1 操作系统
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gw4rbq5w9aj308904qmx5.jpg)
+
 Ubuntu Server 20.04
 
 ### 2.2 网络要求
-网络联通性要极佳，延迟极小。
+网络连通性要极佳，延迟极小。
 
 同时需要有固定IP。
 
@@ -30,9 +41,9 @@ pip3 install --user -U boto3 pyOpenSSL substrate-interface packaging requests
 
 ## 3. 配置端口
 ### 3.1 默认端口
-* cMix Node端口：11420
-* Gateway端口：22840
-* xx chain端口：15974
+* `cMix Node`端口：`11420`
+* `Gateway`端口：`22840`
+* `xx chain`端口：`15974`
 
 ### 3.2 防火墙开启上述端口
 ```
@@ -72,8 +83,10 @@ sudo lshw -c display // 验证GPU是否正常安装
 nvidia-smi // 查看GPU参数
 ```
 
+-----
+
 # 第二部分 cMix Node安装与配置
-## 1. 下载`xxnetwork`的`node`安装包
+## 1. 下载`xxnetwork`的`cmix node`安装包
 ```
 cd /opt/
 sudo curl -L -O https://xx.network/protonet-node.tar.gz
@@ -111,7 +124,7 @@ scp -r [Node username]@[Node public IP]:/opt/xxnetwork/cred/ cred/
 打开配置文件，将`User`改为服务器的用户帐号。
 
 ## 5. 配置`xxnetwork-chain.service`
-打开配置文件，将`User`改为用户帐号。
+打开配置文件，将`User`改为服务器的用户帐号。
 
 另外，在`ExecStart`执行命令的参数`--validator`后面，加上`--name 节点名称`，如：
 ```
@@ -124,7 +137,9 @@ y.polkadot.io/submit/ 0' --base-path /opt/xxnetwork/db --port 15974 --ws-port 63
 ### 6.1 安装并运行`PostgreSQL`
 ```
 sudo apt install -y postgresql-client postgresql postgresql-contrib
+
 sudo update-rc.d postgresql enable
+
 sudo service postgresql start
 ```
 
@@ -139,7 +154,7 @@ sudo -u postgres createuser --createdb --pwprompt cmix
 sudo -u postgres createdb -O cmix cmix_node
 ```
 
-### 6.4 再次编辑`./config/cmix.yaml`
+### 6.4 编辑`./config/cmix.yaml`
 将`database`的`password`一项改为`5.2`步设定的密码。如果上述步骤中改了数据库用户名或数据库名，也在相应配置中调整。
 
 ### 6.5 验证数据库是否正确配置
@@ -160,19 +175,23 @@ sudo chown [user]:[user] -Rv /opt/xxnetwork
 ### 7.1 给`cmix`和`xxchain`建立软链接
 ```
 sudo ln -s /opt/xxnetwork/xxnetwork-cmix.service /etc/systemd/system
+
 sudo ln -s /opt/xxnetwork/xxnetwork-chain.service /etc/systemd/system
+
 sudo systemctl daemon-reexec
 ```
 
 ### 7.2 激活`cmix`和`xxchain`服务
 ```
 sudo systemctl enable xxnetwork-cmix.service
+
 sudo systemctl enable xxnetwork-chain.service
 ```
 
 ### 7.3 启动`cmix`和`xxchain`服务
 ```
 sudo systemctl start xxnetwork-chain.service
+
 sudo systemctl start xxnetwork-cmix.service
 ```
 以上命令执行后，两个程序将在后台运行。
@@ -180,6 +199,7 @@ sudo systemctl start xxnetwork-cmix.service
 ### 7.4 查看服务运行状态
 ```
 sudo systemctl status xxnetwork-cmix.service
+
 sudo systemctl status xxnetwork-chain.service
 ```
 ### 7.5 查看进程
@@ -193,6 +213,8 @@ ps -A | grep xxnetwork
 则说明`cMix Node`已经正常运行
 
 *注意：这时xxnetwork-cmix并没有完全启动，这时候，需要在完成第三部分后进行初始质押，然后才能看到xxnetwork-cmix服务启动，接着gateway才能连上cmix node，节点开始工作*
+
+----------------------------------------------------------------
 
 # 第三部分 Gateway安装与配置
 ## 1. 下载`xxnetwork`的`Gateway`软件包
@@ -250,7 +272,8 @@ sudo -u postgres createuser --createdb --pwprompt cmix
 sudo -u postgres createdb -O cmix cmix_gateway
 ```
 
-### 5.4 再次编辑`./config/gateway.yaml`，将`database`的`password`一项改为设定的密码。如果上述步骤中改了数据库用户名或数据库名，也在相应配置中调整。
+### 5.4 更新数据库密码
+再次编辑`./config/gateway.yaml`，将`database`的`password`一项改为设定的密码。如果上述步骤中改了数据库用户名或数据库名，也在相应配置中调整。
 
 ### 5.5 验证数据库是否正确配置
 ```
@@ -303,12 +326,14 @@ ps -A | grep xxnetwork
 ~~~~~ ?        00:00:18 xxnetwork-gatew
 ```
 
-如果看不到`xxnetwork-gatew`，说明`gateway`还没启动，稍等。
+如果看不到`xxnetwork-gatew`，说明`gateway`还没启动，稍等，或者查看`log/gateway_wrapper.log`找到原因。
+
+--------------------------------
 
 # 第四部分 质押节点
 节点要有质押收益，必须成为验证人节点。
 
-## 1. 确认节点运行状态良好
+### 1. 确认节点运行状态良好
 进入`cMix Node`节点，执行`cat /opt/xxnetwork/log/chain.log | grep Syncing`，查看并确认链是否正常运行。
 
 执行`tail -2 /opt/xxnetwork/log/cmix-wrapper.log`，查看节点同步与共识情况，如果显示：
@@ -316,19 +341,25 @@ ps -A | grep xxnetwork
 [INFO] 09-Jul-21 16:25:07: Waiting on IDF for consensus...
 [INFO] 09-Jul-21 16:25:07: Waiting on consensus ready state...
 ```
-可以继续下一步，否则继续等待。
+则继续下一步。
 
-## 2. 获得`session key`
+*注意：这时`cMix Node`其实尚未真正启动，需要完成质押后才启动*
+
+### 2. 获得`session key`
 执行以下`curl`指令：
 ```
-curl -H "Content-Type: application/json" -d '{"id":1, "jsonrpc":"2.0", "method": "author_rotateKeys", "params":[]}' http://localhost:9933 -o /opt/xxnetwork/cred/session-keys.json
+curl -H "Content-Type: application/json" \
+-d '{"id":1, "jsonrpc":"2.0", "method": "author_rotateKeys", "params":[]}' \
+http://localhost:9933 -o /opt/xxnetwork/cred/session-keys.json
 ```
 这时，会在`cred`目录下生成一个新的文件`session-keys.json`。
 
 打开该文件，`result`就是需要绑定的`session key`。
 
-### 获得cmix ID
+### 3. 获得cmix ID
 打开`cred`目录下的`cmix-IDF.json`，`hexNodeID`就是`cmix ID`
+
+----------------------------------------------------------------
 
 # 第五部分 绑定节点账户
 至此，您已经获得了`session key`和`cmix ID`。接下去，需要在浏览器中打开xx network浏览器网页版，将节点与账户绑定。
