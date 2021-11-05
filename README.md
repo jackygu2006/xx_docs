@@ -192,6 +192,8 @@ ps -A | grep xxnetwork
 ```
 则说明`cMix Node`已经正常运行
 
+*注意：这时xxnetwork-cmix并没有完全启动，这时候，需要在完成第三部分后进行初始质押，然后才能看到xxnetwork-cmix服务启动，接着gateway才能连上cmix node，节点开始工作*
+
 # 第三部分 Gateway安装与配置
 ## 1. 下载`xxnetwork`的`Gateway`软件包
 ```
