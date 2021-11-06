@@ -1,11 +1,11 @@
 # 使用xxDK在xxnetwork上发送/接受隐私消息
 
-## 环境：
+### 环境：
 golang >1.13
 
 最好在有公网IP的设备上跑。
 
-## 安装
+### 安装
 ```
 git clone https://gitlab.com/elixxir/client.git client
 cd client
@@ -26,14 +26,14 @@ GOOS=darwin GOARCH=amd64 CGO_ENABLED=0 go build -ldflags '-w -s' -o client main.
 使用命令`./client help`，查看帮助。
 
 
-## 生成客户端证书
+### 生成客户端证书
 ```
 openssl s_client -showcerts -connect *.*.*.*:22840 < /dev/null 2>&1 | openssl x509 -outform PEM > certfile.pem
 ```
 *.*.*.*是`gateway`的节点IP，一般默认安装的话，`gateway`的端口号为`22840`。
 以上命令执行后，在当前目录下会生成一个证书文件：`certfile.pem`。
 
-## 获得NDF
+### 获得NDF
 NDF是每个客户端的`ID`，以`json`格式存在文件中。
 
 ```
@@ -63,14 +63,14 @@ NDF是每个客户端的`ID`，以`json`格式存在文件中。
 ./client getndf --gwhost 35.200.211.94:22840 --cert certfile.pem > ndf.json
 ```
 
-## 给自己发送测试消息：
+### 给自己发送测试消息：
 ```
 ./client --password 1234567 --ndf ndf.json -l client.log -s sessions --writeContact user-contact.json --unsafe -m "Hello World, without E2E Encryption"
 ```
 以上`1234567`是自定义密码，`sessions`是对话保留的目录。
 
 
-## 不同用户间发送消息
+### 不同用户间发送消息
 设置消息监听（用`&`以进程方式在后台运行）：
 ```
 ./client --password user1234567 --ndf ndf.json -l client1.log -s user1session --destfile user2-contact.json --unsafe -m "Hi User 2, from User 1 without E2E Encryption" &
@@ -88,7 +88,7 @@ NDF是每个客户端的`ID`，以`json`格式存在文件中。
 `--destfile` is used to specify the recipient. You can also use
 `--destid b64:...` using the user's base64 id which is printed in the logs.
 
-## 不同用户间发送加密消息
+### 不同用户间发送加密消息
 ```
 # Get user contact jsons
 client --password user1234567 --ndf ndf.json -l client1.log -s user1session --writeContact user1-contact.json --unsafe -m "Hi"
