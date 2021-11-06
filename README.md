@@ -364,6 +364,5 @@ http://localhost:9933 -o /opt/xxnetwork/cred/session-keys.json
 # 第五部分 绑定节点账户
 至此，您已经获得了`session key`和`cmix ID`。接下去，需要在浏览器中打开xx network浏览器网页版，将节点与账户绑定。
 
-本教程为节点配置过程中的技术相关操作，接下去绑定节点账户属于运营相关操作，由另外文章介绍。
-
+相关教程，请移步：https://xxnetwork.wiki/index.php/Staking_a_Node
 
