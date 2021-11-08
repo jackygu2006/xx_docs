@@ -1,6 +1,9 @@
-const validatorAccount = '5FQvuaC6nrrnSYk2czFkz5yeTLdbHWi7TkwzWYzR3Xa1eAoJ';
-const nominatorAccount = '5HgiRemWuS6LF31SYanw58JATnTg3yWdTNuJYK4h3fC8tWfZ';
+// params start
+const validatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
+const nominatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
+const newStakeAmount = 10000 * 1e9;
 const era = 716;
+// params end
 
 const currentEra = await api.query.staking.currentEra();
 console.log(`current Era: ${currentEra}`);
@@ -30,6 +33,8 @@ console.log('validator points: ' + validatorPoint);
 console.log('total points: ' + points.total);
 console.log('point rate: ' + (validatorPoint / points.total * 100) + ' %');
 console.log('everage point rate: ' + (1 / validatorsArray.length * 100) + ' %');
+const diff = (validatorPoint / points.total - 1 / validatorsArray.length) / (1 / validatorsArray.length)
+console.log('diff from average: ' + (diff * 100) + ' %');
 console.log('*node reward: ' + (totalPayout * validatorPoint / points.total) / 1e9 + ' PTC');
 
 // Stake
@@ -75,7 +80,7 @@ console.log('simple APR: ' + 24 / hours * 365 * reward / nominatorAmount * 100 +
 
 // Top 20 point validators
 console.log('================');
-console.log('Top 20 validators');
+console.log('Top 20 points validators');
 let individualArray = [];
 for(var v in individual) {
 	individualArray.push({
@@ -84,8 +89,36 @@ for(var v in individual) {
 	});
 }
 individualArray.sort(function(a, b) {return a.points < b.points ? 1 : -1});
-for(var i = 0; i < 20; i++) console.log(i + 1, individualArray[i].validator, individualArray[i].points);
+for(let i = 0; i < 20; i++) console.log(i + 1, individualArray[i].validator, individualArray[i].points);
 
+// 综合预期收益排行
+console.log('================');
+/**
+ * index = (1 - commission) * newStakeAmount / (totalStakeAmount + newStakeAmount) * validatorPoint / points.total
+ */
+let array = [];
+for(let i = 0; i < 100; i++) {
+	const _validatorAccount = individualArray[i].validator; 
+	const _validators = await api.query.staking.validators(_validatorAccount);
+	const _commission = _validators.commission / 1e9;
+	const _erasStakers = await api.query.staking.erasStakers(era, _validatorAccount);
+	const _totalStakeAmount = _erasStakers.total;
+	const _validatorPoint = individual[_validatorAccount];
+
+	const index = (1 - _commission) * newStakeAmount / (_totalStakeAmount + newStakeAmount) * _validatorPoint / points.total * 1e20;
+	const o = {
+		validator: _validatorAccount,
+		index,
+		points: individualArray[i].points,
+	}
+	console.log(JSON.stringify(o));
+	array.push(o);
+}
+
+console.log('================');
+console.log('Top 20 high yield validators if stake ' + newStakeAmount / 1e8);
+array.sort(function(a, b) {return a.index < b.index ? 1 : -1});
+for(let i = 0; i < 100; i++) console.log(i + 1, array[i].validator, array[i].index);
 
 console.log('\nDone...');
 
