@@ -2,7 +2,8 @@
 const validatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
 const nominatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
 const newStakeAmount = 10000 * 1e9;
-const era = 716;
+const era = 721;
+const showTops = false;
 // params end
 
 const currentEra = await api.query.staking.currentEra();
@@ -78,6 +79,11 @@ const hours = currentSession / era;
 console.log('simple APR: ' + 24 / hours * 365 * reward / nominatorAmount * 100 + ' %');
 // console.log('compound APR: ');
 
+if(!showTops) {
+  console.log('Done...');
+  return;
+}
+
 // Top 20 point validators
 console.log('================');
 console.log('Top 20 points validators');
@@ -121,4 +127,3 @@ array.sort(function(a, b) {return a.index < b.index ? 1 : -1});
 for(let i = 0; i < 100; i++) console.log(i + 1, array[i].validator, array[i].index);
 
 console.log('\nDone...');
-

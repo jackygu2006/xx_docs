@@ -16,3 +16,7 @@ The reward of era is `stake payout * index`
   
 ## Strategy
 Stake in the less staked, lower commission, higher perfomance point nodes.
+
+
+
+
