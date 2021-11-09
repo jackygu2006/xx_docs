@@ -1,3 +1,5 @@
+[返回目录](README.md)
+
 ## Era reward formula
 ```
 index = (1 - commission) * newStakeAmount / (totalStakeAmount + newStakeAmount) * validatorPoint / points.total
