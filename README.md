@@ -12,4 +12,7 @@
 ### 4. 如何使用xxDK收发保密消息
 [点击这里](How_to_use_xxdk_send_message.md)
 
-### 5. 使用xx Wallet手机钱包就行节点提名
+### 5. 如何使用Flutter和xxDK开发一个聊天应用
+[点击这里](How_to_develop_app_with_flutter_xxdk.md)
+
+### 6. 使用xx Wallet手机钱包就行节点提名
