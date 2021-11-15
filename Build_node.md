@@ -47,6 +47,7 @@ pip3 install --user -U boto3 pyOpenSSL substrate-interface packaging requests
 * `Gateway`端口：`22840`
 * `xx chain`端口：`15974`
 
+
 ### 3.2 防火墙开启上述端口
 ```
 sudo ufw disable
@@ -121,6 +122,8 @@ scp -r [Node username]@[Node public IP]:/opt/xxnetwork/cred/ cred/
 如果不用GPU，则将配置文件中的`useGPU`改为`false`。
 
 如果证书文件不在默认安装位置，也请调整相应目录。
+
+如果需要改端口，也在这个配置里改。注意如果端口改了，请调整相应端口的防火墙策略。
 
 ## 4. 配置`xxnetwork-cmix.service`
 打开配置文件，将`User`改为服务器的用户帐号。
