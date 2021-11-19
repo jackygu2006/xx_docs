@@ -1,8 +1,8 @@
 // params start
-const validatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
-const nominatorAccount = '5DSK87eLHYWKKb7ZP4iDYvdBSTXsDbzAqmMxJn1ndvEy4Lr8';
+const validatorAccount = '6VSrpiHJaSTUb45eSvWL6jsYkKHWoxES1j7BNRBpDnEbRsqn';
+const nominatorAccount = '6VSrpiHJaSTUb45eSvWL6jsYkKHWoxES1j7BNRBpDnEbRsqn';
 const newStakeAmount = 10000 * 1e9;
-const era = 721;
+const era = 1;
 const showTops = false;
 // params end
 
@@ -11,7 +11,7 @@ console.log(`current Era: ${currentEra}`);
 
 const totalPayout = await api.query.staking.erasValidatorReward(era);
 console.log(`caculating era ${era}`);
-console.log(`total validators payout: ${totalPayout / 1e9} PTC`);
+console.log(`total validators payout: ${totalPayout / 1e9} XX`);
 
 const validators = await api.query.staking.validators(validatorAccount);
 const commission = validators.commission / 1e9;
@@ -36,44 +36,44 @@ console.log('point rate: ' + (validatorPoint / points.total * 100) + ' %');
 console.log('everage point rate: ' + (1 / validatorsArray.length * 100) + ' %');
 const diff = (validatorPoint / points.total - 1 / validatorsArray.length) / (1 / validatorsArray.length)
 console.log('diff from average: ' + (diff * 100) + ' %');
-console.log('*node reward: ' + (totalPayout * validatorPoint / points.total) / 1e9 + ' PTC');
+console.log('*node reward: ' + (totalPayout * validatorPoint / points.total) / 1e9 + ' XX');
 
 // Stake
 console.log('================');
-console.log('node total stake: ' + erasStakers.total / 1e9 + ' PTC');
+console.log('node total stake: ' + erasStakers.total / 1e9 + ' XX');
 
 let reward = 0;
 if(nominatorAccount == validatorAccount) {
 	nominatorAmount = erasStakers.own;
-	console.log('self stake: ' + nominatorAmount / 1e9 + ' PTC');
+	console.log('self stake: ' + nominatorAmount / 1e9 + ' XX');
 	console.log('self stake rate: ' + nominatorAmount / erasStakers.total * 100 + ' %');
 	
 	console.log('================');
 	reward = totalPayout * validatorPoint / points.total * (1 - commission) * nominatorAmount / erasStakers.total;
-	console.log('era stake reward: ' + reward / 1e9 + ' PTC');
+	console.log('era stake reward: ' + reward / 1e9 + ' XX');
 	const operatingReward = totalPayout * validatorPoint / points.total * commission;
-	console.log('era operating reward: ' + operatingReward / 1e9 + ' PTC');
+	console.log('era operating reward: ' + operatingReward / 1e9 + ' XX');
 	reward = reward + operatingReward;
-	console.log('*era total reward: ' + reward / 1e9 + ' PTC');
+	console.log('*era total reward: ' + reward / 1e9 + ' XX');
 } else {
 	for(i = 0; i < erasStakers.others.length; i++) {
 		if(nominatorAccount == erasStakers.others[i].who) {
 			nominatorAmount = erasStakers.others[i].value;
 		}
 	}
-	console.log('nominator stake: ' + nominatorAmount / 1e9 + ' PTC');
+	console.log('nominator stake: ' + nominatorAmount / 1e9 + ' XX');
 	console.log('nominating rate: ' + nominatorAmount / erasStakers.total * 100 + ' %');
 	
 	console.log('================');
 	reward = totalPayout * validatorPoint / points.total * (1 - commission) * nominatorAmount / erasStakers.total;
-	console.log('*era reward: ' + reward / 1e9 + ' PTC');
+	console.log('*era reward: ' + reward / 1e9 + ' XX');
 }
 
 
 // Hours per Era
-const currentSession = await api.query.staking.erasStartSessionIndex(era);
-const hours = currentSession / era;
-// console.log('hours per era: ' + hours);
+// const currentSession = await api.query.staking.erasStartSessionIndex(era);
+const hours = 24;//currentSession / era;
+console.log('hours per era: ' + hours);
 
 // APR
 console.log('simple APR: ' + 24 / hours * 365 * reward / nominatorAmount * 100 + ' %');

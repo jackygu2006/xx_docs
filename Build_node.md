@@ -60,7 +60,7 @@ sudo ufw enable
 
 如果`Node`和`Gateway`分别在不同服务器上的话，开启对应的端口。
 
-## 4. 配置用户上线
+## 4. 配置用户上限
 ```
 sudo nano /etc/security/limits.conf
 ```
