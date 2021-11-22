@@ -6,6 +6,31 @@ const era = 1;
 const showTops = false;
 // params end
 
+// 计算质押量
+async function getTotalStakeableIssuance() {
+  const totalIssuance = await api.query.balances.totalIssuance();
+  const rewardsPoolAccount = await api.consts.xxEconomics.rewardsPoolAccount;
+  const balanceRPA = await api.query.balances.account(rewardsPoolAccount);
+  const totalCustody = await api.query.xxCustody.totalCustody();
+  const liquidityRewards = await api.query.xxEconomics.liquidityRewards();
+  
+  const totalStakeableIssuance = totalIssuance.sub(balanceRPA.free).sub(totalCustody).sub(liquidityRewards);
+  return {
+    totalIssuance,
+    rewardsPoolAccount,
+    balanceRPA: balanceRPA.free,
+    totalCustody,
+    liquidityRewards,
+    totalStakeableIssuance
+  }
+}
+
+const totalStakeableIssuance = await getTotalStakeableIssuance();
+console.log("totalStakeableIssuance", totalStakeableIssuance.totalStakeableIssuance / 1e9)
+
+// 计算通胀
+
+
 const currentEra = await api.query.staking.currentEra();
 console.log(`current Era: ${currentEra}`);
 

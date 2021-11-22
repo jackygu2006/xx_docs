@@ -1,4 +1,4 @@
-const maxNominate = 40;
+const maxNominate = 100;
 
 const currentEra = await api.query.staking.currentEra();
 console.log(`current Era: ${currentEra}`);
@@ -31,16 +31,18 @@ for(let i = 0; i < validatorsArray.length; i++) {
 
 	// point weight
 	const validatorPoint = individual[validatorAccount] / totalPoints;
-	const index = (1 - commission) * validatorPoint / stakedAmount;
 
-	all.push({
-		account: validatorAccount,
-		stakedAmount,
-		commission,
-		validatorPoint,
-		index,
-	})
-	console.log(i, index, validatorAccount, commission, validatorPoint, Math.round(stakedAmount / 1e9));
+	if(stakedAmount > 0 && commission > 0 && validatorPoint > 0) {
+		const index = (1 - commission) * validatorPoint / stakedAmount;
+		all.push({
+			account: validatorAccount,
+			stakedAmount,
+			commission,
+			validatorPoint,
+			index,
+		})
+		console.log(i, index, validatorAccount, commission, validatorPoint, Math.round(stakedAmount / 1e9));	
+	}
 }
 
 const sortedArray = all.sort(function(a, b) {
