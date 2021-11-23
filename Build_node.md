@@ -359,7 +359,10 @@ http://localhost:9933 -o /opt/xxnetwork/cred/session-keys.json
 ```
 这时，会在`cred`目录下生成一个新的文件`session-keys.json`。
 
-打开该文件，`result`就是需要绑定的`session key`。
+打开该文件，`result`就是需要绑定的`session key`，同时在`/opt/xxnetwork/db/chain/xxnetwork/keystore`目录下，会生成四个文件。
+
+### 注意：
+> 上述`curl`命令只能执行一次，如果需要再次执行，需要将`/opt/xxnetwork/db/chain/xxnetwork/keystore`目录下清空，否则会在该`keystore`目录下又产生四个文件，从而导致节点创建失败。
 
 ### 3. 获得cmix ID
 打开`cred`目录下的`cmix-IDF.json`，`hexNodeID`就是`cmix ID`
