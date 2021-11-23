@@ -367,6 +367,29 @@ http://localhost:9933 -o /opt/xxnetwork/cred/session-keys.json
 ### 3. 获得cmix ID
 打开`cred`目录下的`cmix-IDF.json`，`hexNodeID`就是`cmix ID`
 
+### 4. 输入以下命令，做最后确认
+cmix node 检测：
+```
+cat /opt/xxnetwork/cred/cmix-IDF.json
+ps -A | grep xxnetwork
+cat /opt/xxnetwork/cred/session-keys.json
+ls /opt/xxnetwork/db/chains/xxnetwork/keystore/ 确保只有四个文件
+tail -f /opt/xxnetwork/log/chain.log 
+tail -f /opt/xxnetwork/log/cmix-wrapper.log
+sudo systemctl status xxnetwork-cmix.service
+sudo systemctl status xxnetwork-chain.service
+```
+gateway检测
+```
+sudo docker exec -it ubuntu-1 bash 进到docker
+ls /opt/xxnetwork/cred/
+ps -A | grep xxnetwork
+tail -f /opt/xxnetwork/log/chain.log 
+tail -f /opt/xxnetwork/log/gateway-wrapper.log
+sudo systemctl status xxnetwork-gateway.service
+sudo systemctl status xxnetwork-chain.service
+```
+
 ----------------------------------------------------------------
 
 # 第五部分 绑定节点账户
