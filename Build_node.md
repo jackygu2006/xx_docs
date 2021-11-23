@@ -381,7 +381,6 @@ sudo systemctl status xxnetwork-chain.service
 ```
 gateway检测
 ```
-sudo docker exec -it ubuntu-1 bash 进到docker
 ls /opt/xxnetwork/cred/
 ps -A | grep xxnetwork
 tail -f /opt/xxnetwork/log/chain.log 
