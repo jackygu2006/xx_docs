@@ -373,7 +373,7 @@ cmix node 检测：
 cat /opt/xxnetwork/cred/cmix-IDF.json
 ps -A | grep xxnetwork
 cat /opt/xxnetwork/cred/session-keys.json
-ls /opt/xxnetwork/db/chains/xxnetwork/keystore/ 确保只有四个文件
+ll /opt/xxnetwork/db/chains/xxnetwork/keystore/ 确保只有四个文件
 tail -f /opt/xxnetwork/log/chain.log 
 tail -f /opt/xxnetwork/log/cmix-wrapper.log
 sudo systemctl status xxnetwork-cmix.service
@@ -381,7 +381,7 @@ sudo systemctl status xxnetwork-chain.service
 ```
 gateway检测
 ```
-ls /opt/xxnetwork/cred/
+ll /opt/xxnetwork/cred/
 ps -A | grep xxnetwork
 tail -f /opt/xxnetwork/log/chain.log 
 tail -f /opt/xxnetwork/log/gateway-wrapper.log
