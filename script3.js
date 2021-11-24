@@ -1,27 +1,31 @@
 async function getTotalStakeableIssuance() {
   const totalIssuance = await api.query.balances.totalIssuance();
   const rewardsPoolAccount = await api.consts.xxEconomics.rewardsPoolAccount;
-  const balanceRPA = await api.query.balances.account(rewardsPoolAccount);
+  const rewardsPoolBalance = await api.query.system.account(rewardsPoolAccount);
   const totalCustody = await api.query.xxCustody.totalCustody();
   const liquidityRewards = await api.query.xxEconomics.liquidityRewards();
-  const rewardsPoolAndSale =  553402166 * 1e9; 
-  const liquidity =  31027692 * 1e9;
+  const publicTestnetAccount = await api.consts.xxPublic.testnetAccount;
+  const publicTestnetBalance = await api.query.system.account(publicTestnetAccount);
+  const publicSaleAccount = await api.consts.xxPublic.saleAccount;
+  const publicSaleBalance = await api.query.system.account(publicSaleAccount);
   
-  console.log(totalIssuance / 1e9);
-  console.log(balanceRPA.free / 1e9);
-  console.log(totalCustody / 1e9);
-  console.log(liquidityRewards / 1e9);
+  console.log("Total Issuance", totalIssuance / 1e9 + " XX");
+  console.log("RewardsPool Balance", rewardsPoolBalance.data.free / 1e9 + " XX");
+  console.log("Total Custody", totalCustody / 1e9 + " XX");
+  console.log("Liquidity Rewards", liquidityRewards / 1e9 + " XX");
+  console.log("Public Testnet Balance", publicTestnetBalance.data.free / 1e9 + " XX");
+  console.log("Public Sale Balance", publicSaleBalance.data.free / 1e9 + " XX");
 
-  const totalStakeableIssuance = totalIssuance - balanceRPA.free - totalCustody - liquidityRewards;
+  const totalStakeableIssuance = totalIssuance - rewardsPoolBalance.data.free - totalCustody - liquidityRewards - publicTestnetBalance.data.free - publicSaleBalance.data.free;
   return {
     totalIssuance,
     rewardsPoolAccount,
-    balanceRPA: balanceRPA.free,
+    rewardsPoolBalance: rewardsPoolBalance.data.free,
     totalCustody: totalCustody,
     liquidityRewards: liquidityRewards,
+    publicTestnetBalance: publicTestnetBalance.data.free,
+    publicSaleBalance: publicSaleBalance.data.free,
     totalStakeableIssuance: totalStakeableIssuance,
-		rewardsPoolAndSale,
-		liquidity
   }
 }
 
@@ -32,14 +36,13 @@ async function calcInflation(inflationParams, totalStaked, totalStakeableIssuanc
   let { falloff, idealStake, minInflation } = inflationParams;
   falloff = falloff / 1e9;
   idealStake = idealStake / 1e9;
-  minInflation = minInflation / 1e9;
+  minInflation = 0; //minInflation / 1e9;
   
   const stakedFraction = totalStaked == 0 || totalStakeableIssuance == 0
     ? 0
     : totalStaked / totalStakeableIssuance;
 
   const idealInterestNumber = idealInterest / 1e9;
-  console.log(stakedFraction, idealInterestNumber, minInflation, idealStake);
   
   const inflation = 100 * (minInflation + (
     stakedFraction <= idealStake
@@ -55,21 +58,25 @@ async function calcInflation(inflationParams, totalStaked, totalStakeableIssuanc
   };
 }
 
+const currentEra = await api.query.staking.currentEra();
+console.log(`Current Era: ${currentEra}`);
+
 const totalStakeable = await getTotalStakeableIssuance();
-console.log(JSON.stringify(totalStakeable))
-const totalStakeableIssuance = totalStakeable.totalStakeableIssuance / 10; // 没办法获取准确书记，先手动除10
-console.log("totalStakeableIssuance", totalStakeableIssuance / 1e9);
+const totalStakeableIssuance = totalStakeable.totalStakeableIssuance;
+console.log("============")
+console.log("Total Stakeable Issuance", Math.round(totalStakeableIssuance / 1e9) + " XX");
 
 const inflationParams = await api.query.xxEconomics.inflationParams();
-console.log("inflationParams", inflationParams);
+console.log("Min Inflation", 0);//inflationParams.minInflation / 1e9 * 100 + "%");
+console.log("Ideal Stake Rate", inflationParams.idealStake / 1e9 * 100 + "%");
+console.log("Falloff", inflationParams.falloff / 1e9 * 100 + "%");
 
-const totalStaked = await api.query.staking.erasTotalStake(5);
-console.log("totalStaked", totalStaked);
+const totalStaked = await api.query.staking.erasTotalStake(parseInt(currentEra));
+console.log("Total staked", Math.round(totalStaked / 1e9) + " XX");
+console.log("Stake Fraction", totalStaked / totalStakeableIssuance * 100 + "%");
 
 const idealInterest = await api.query.xxEconomics.interestPoints();
-// 参考 export default function useIdealInterest(): BN | undefined {
 const blockHeight = await api.query.system.number();
-console.log(blockHeight);
 
 let interest = 0;
 for(var i = 0; i < idealInterest.length; i++) {
@@ -78,10 +85,10 @@ for(var i = 0; i < idealInterest.length; i++) {
     break;
   }
 }
-console.log("interest", interest / 1e9);
+console.log("Ideal interest", interest / 1e9 * 100 + "%");
 
 const inflation = await calcInflation(inflationParams, totalStaked, totalStakeableIssuance, interest);
-console.log(JSON.stringify(inflation))
+console.log("Inflation", inflation.inflation + "%");
+console.log("Anual Profit Rate", inflation.inflation / (totalStaked / totalStakeableIssuance) + "%");
+console.log("Era Reward", totalStakeableIssuance * inflation.inflation / 100 / 365.25 / 1e9 + " XX");
 
-// 以下公式推导出来，不正确
-console.log(100 / 36525 * totalStakeableIssuance / 1e9 * (inflationParams.minInflation / 1e9 + totalStaked / totalStakeableIssuance / (inflationParams.idealStake / 1e9) * (interest / 1e9 * inflationParams.idealStake / 1e9 - inflationParams.minInflation / 1e9)));

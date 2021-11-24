@@ -22,3 +22,6 @@
 [点击这里](About_xx_tools.md)
 
 ### 8. 使用xx Wallet手机钱包就行节点提名
+
+### 9. NPOS节点奖励算法
+[点击这里](how_to_calculate_reward.md)
