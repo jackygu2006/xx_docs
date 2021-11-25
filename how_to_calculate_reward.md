@@ -26,13 +26,17 @@ xx network的经济模型采取`NPoS`机制，在NPOS机制下，决定每个节
 
 (2)
 
-$InflationRate = MinInflationRate + StakeRate * (IdeaInterest - \frac{MinInflationRate}{ IdealStakeRate})$
+<!-- $InflationRate = MinInflationRate + StakeRate * (IdeaInterest - \frac{MinInflationRate}{ IdealStakeRate})$ -->
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7ejnm79j30oj01dmxa.jpg)
 
 参数：
 
 * $MinInflationRate$: 最小通胀率
 
-* $StakeRate$: 全网质押率，即: 质押总量 / 当前可质押总量, 公式为：$StakeRate = \frac{StakedAmount}{StakeableAmount}$
+* $StakeRate$: 全网质押率，即: 质押总量 / 当前可质押总量, 公式为：
+
+  <!-- $StakeRate = \frac{StakedAmount}{StakeableAmount}$ -->
+  ![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7f75hmoj309t01ct8m.jpg)
 
 * $IdeaInterest$: 目标年化收益率。
 
@@ -51,15 +55,19 @@ TODO
 
 (3)
 
-$InflationRate = StakeRate * IdeaInterest$
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7iyqy8rj30cs00i3ye.jpg)
+<!-- $InflationRate = StakeRate * IdeaInterest$ -->
 
 将他代入每天总奖励的公式，得到：
+<!-- $DailyReward = StakeableAmoount * \frac{StakeRate * IdeaInterest}{365.25}$ -->
 
-$DailyReward = StakeableAmoount * \frac{StakeRate * IdeaInterest}{365.25}$，因为$StakedAmount = StakeableAmoount * StakeRate$，所以有：
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7gm249yj30jc01cjre.jpg)
+
+因为$StakedAmount = StakeableAmoount * StakeRate$，所以有：
 
 (4)
-
-$DailyReward = \frac{StakedAmount * IdeaInterest}{365.25}$
+<!-- $DailyReward = \frac{StakedAmount * IdeaInterest}{365.25}$ -->
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7hvyu0jj30e601c748.jpg)
 
 xx network在前五年内没有通胀，所以$MinInflationRate = 0$，故可以使用上述公式方便地计算节点奖励。
 
