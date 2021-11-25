@@ -86,6 +86,10 @@ TODO
 
 ----------------------------------------------------------------
 ## 附录：JavaScript脚本代码
+
+以下脚本，都可在xx network官方浏览器中执行，方式如下：
+![](https://tva1.sinaimg.cn/large/008i3skNgy1gwr7s67phyj31wm0u0n1u.jpg)
+
 ### 1. 获取可质押代币总量 $totalStakeableIssuance$
 
 ```
