@@ -4,7 +4,6 @@ const currentEra = await api.query.staking.currentEra();
 console.log(`current Era: ${currentEra}`);
 const era = currentEra - 1;
 
-const totalPayout = await api.query.staking.erasValidatorReward(era);
 console.log(`caculating era ${era}`);
 
 const validatorsArray = await api.query.session.validators();
