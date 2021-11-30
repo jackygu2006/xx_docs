@@ -1,4 +1,5 @@
-validatorAccount = '6XAD1hxSNjb5PV6WaF3NuuJxvYwDBNXH2PnZAYnuZT2xqNVy';
+validatorAccount = '6YTxZnYDBVQKY5Bg2xtEwMen3xABzNt3bvqdDwVBELcDfoye';
+console.log(validatorAccount);
 const currentEra = await api.query.staking.currentEra();
 console.log(`current era ${currentEra}`)
 
@@ -10,3 +11,4 @@ console.log('validator points: ' + validatorPoint);
 console.log('total points: ' + points.total);
 console.log('average points: ' + (points.total / 250));
 console.log('diff to average: ' + (validatorPoint / (points.total / 250) - 1) * 100 + "%");
+console.log('========');
