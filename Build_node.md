@@ -375,6 +375,7 @@ ps -A | grep xxnetwork
 cat /opt/xxnetwork/cred/session-keys.json
 ll /opt/xxnetwork/db/chains/xxnetwork/keystore/ 确保只有四个文件
 tail -f /opt/xxnetwork/log/chain.log 
+tail -f /opt/xxnetwork/log/cmix.log
 tail -f /opt/xxnetwork/log/cmix-wrapper.log
 sudo systemctl status xxnetwork-cmix.service
 sudo systemctl status xxnetwork-chain.service
@@ -384,14 +385,47 @@ gateway检测
 ll /opt/xxnetwork/cred/
 ps -A | grep xxnetwork
 tail -f /opt/xxnetwork/log/chain.log 
+tail -f /opt/xxnetwork/log/gateway.log
 tail -f /opt/xxnetwork/log/gateway-wrapper.log
 sudo systemctl status xxnetwork-gateway.service
 sudo systemctl status xxnetwork-chain.service
 ```
 
+# 第五部分 换node与gateway服务器
+### 第一步：
+在新服务器上按上述第二，第三部分分别安装`node`和`gateway`。注意不要启动服务，确保链未开始同步，确保数据库已经配置但数据为空。
+
+### 第二步：
+将原`node`上以下文件复制到新服务器相同路径下，如果新服务器上已有文件，覆盖：
+```
+/opt/xxnetwork/cred/*
+/opt/xxnetwork/db/chains/xxnetwork/keystore/*
+/opt/xxnetwork/db/chains/xxnetwork/network/*
+```
+再将原`node`中的数据库克隆到新数据库。
+
+### 第三步：
+将原`gateway`上以下文件复制到新服务器相同路径下，如果新服务器上已有文件，覆盖：
+```
+/opt/xxnetwork/cred/*
+/opt/xxnetwork/db/chains/xxnetwork/keystore/*
+/opt/xxnetwork/db/chains/xxnetwork/network/*
+```
+再将原`gateway`中的数据库克隆到新数据库。
+
+注意：从第二步和第四步完成，间隔时间越短越好。因为`db`目录下文件较大，故需要事先做好规划。
+
+### 第四步：
+将原节点的`node`和`gateway`服务停止。
+
+### 第五步：
+立即启动新的`node`和`gateway`服务，按第四部分NO4，检验node和gateway的各项服务是否正常。
+
+因为原节点已经正常运行过，以上检验应该显示新节点`cmix`和node以及gateway上的`chain`在正常运行的状态。
+
 ----------------------------------------------------------------
 
-# 第五部分 绑定节点账户
+# 第六部分 绑定节点账户
 至此，您已经获得了`session key`和`cmix ID`。接下去，需要在浏览器中打开xx network浏览器网页版，将节点与账户绑定。
 
 相关教程，请[点击这里](/Connect_node_with_validator_account.md)
