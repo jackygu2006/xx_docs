@@ -391,7 +391,7 @@ sudo systemctl status xxnetwork-gateway.service
 sudo systemctl status xxnetwork-chain.service
 ```
 
-# 第五部分 换node与gateway服务器
+# 第五部分 更新node与gateway服务器
 ### 第一步：
 在新服务器上按上述第二，第三部分分别安装`node`和`gateway`。注意不要启动服务，确保链未开始同步，确保数据库已经配置但数据为空。
 
@@ -412,8 +412,6 @@ sudo systemctl status xxnetwork-chain.service
 /opt/xxnetwork/db/chains/xxnetwork/network/*
 ```
 再将原`gateway`中的数据库克隆到新数据库。
-
-注意：从第二步和第四步完成，间隔时间越短越好。因为`db`目录下文件较大，故需要事先做好规划。
 
 ### 第四步：
 启动`node`和`gateway`上进行区块链同步，命令：
@@ -439,7 +437,7 @@ sudo systemctl stop xxnetwork-chain.service
 ```
 
 ### 第六步：
-启动新的`node`和`gateway`服务，并按第四部分NO4，检验node和gateway的各项服务是否正常。
+老的节点停止后，必须等待5分钟以上，启动新的`node`和`gateway`服务，并按第四部分NO4，检验node和gateway的各项服务是否正常。
 ```
 // 在node上执行
 sudo systemctl start xxnetwork-cmix.service
