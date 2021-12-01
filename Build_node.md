@@ -416,10 +416,37 @@ sudo systemctl status xxnetwork-chain.service
 注意：从第二步和第四步完成，间隔时间越短越好。因为`db`目录下文件较大，故需要事先做好规划。
 
 ### 第四步：
-将原节点的`node`和`gateway`服务停止。
+启动`node`和`gateway`上进行区块链同步，命令：
+```
+sudo systemctl start xxnetwork-chain.service
+```
+使用`tail -f /opt/xxnetwork/log/chain.log`，观察链同步情况。
+
+区块链同步时不要启动`cmix`和`Gateway`服务。
 
 ### 第五步：
-立即启动新的`node`和`gateway`服务，按第四部分NO4，检验node和gateway的各项服务是否正常。
+区块链同步完成后，将原节点的`node`和`gateway`服务停止。
+
+在`node`上执行：
+```
+sudo systemctl stop xxnetwork-cmix.service
+sudo systemctl stop xxnetwork-chain.service
+```
+在`gateway`上执行：
+```
+sudo systemctl stop xxnetwork-gateway.service
+sudo systemctl stop xxnetwork-chain.service
+```
+
+### 第六步：
+启动新的`node`和`gateway`服务，并按第四部分NO4，检验node和gateway的各项服务是否正常。
+```
+// 在node上执行
+sudo systemctl start xxnetwork-cmix.service
+
+// 在gateway上执行
+sudo systemctl start xxnetwork-gateway.service
+```
 
 因为原节点已经正常运行过，以上检验应该显示新节点`cmix`和node以及gateway上的`chain`在正常运行的状态。
 
